@@ -1,5 +1,5 @@
 // Datos de la empresa. Rellena estos valores cuando estén confirmados:
-// la web los usa en el contacto, el footer, el formulario y WhatsApp.
+// la web los usa en la sección de contacto, el footer, el formulario y WhatsApp.
 // Los datos que queden vacíos no se muestran.
 window.SITE = {
   name: "Terrenalis",
@@ -10,6 +10,11 @@ window.SITE = {
   // Correo que recibe las solicitudes del formulario
   email: "",
 
+  // Teléfono tal y como se mostrará. Ej.: "+34 600 000 000"
   phone: "",
-  address: ""
+
+  // Enlaces a redes sociales (URL completas)
+  instagram: "",
+  facebook: "",
+  linkedin: ""
 };

@@ -7,24 +7,13 @@ document.addEventListener("DOMContentLoaded", () => {
     el.textContent = new Date().getFullYear();
   });
 
-  initHeader();
   initMenu();
-  initReveal();
   initWhatsApp(SITE);
   initContactDetails(SITE);
   initContactForm(SITE);
 });
 
-// Borde inferior de la cabecera al hacer scroll
-function initHeader() {
-  const header = document.querySelector(".site-header");
-  if (!header) return;
-  const update = () => header.classList.toggle("is-scrolled", window.scrollY > 8);
-  update();
-  window.addEventListener("scroll", update, { passive: true });
-}
-
-// Menú hamburguesa desplegable
+// Menú hamburguesa (solo en móvil y tablet)
 function initMenu() {
   const toggle = document.querySelector(".menu-toggle");
   const nav = document.getElementById("site-nav");
@@ -33,7 +22,7 @@ function initMenu() {
   const setOpen = (open) => {
     document.body.classList.toggle("menu-open", open);
     toggle.setAttribute("aria-expanded", String(open));
-    toggle.querySelector(".label").textContent = open ? "Cerrar" : "Menú";
+    toggle.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
   };
 
   toggle.addEventListener("click", () => setOpen(!document.body.classList.contains("menu-open")));
@@ -45,26 +34,8 @@ function initMenu() {
   });
 }
 
-// Aparición suave de los bloques al entrar en pantalla
-function initReveal() {
-  const items = document.querySelectorAll(".reveal");
-  if (!("IntersectionObserver" in window)) {
-    items.forEach((el) => el.classList.add("is-visible"));
-    return;
-  }
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-        io.unobserve(entry.target);
-      }
-    });
-  }, { rootMargin: "0px 0px -10% 0px" });
-  items.forEach((el) => io.observe(el));
-}
-
 // Enlaces de WhatsApp. Sin número configurado, el botón flotante lleva
-// al formulario y el enlace de la sección de contacto queda oculto.
+// al formulario de la página.
 function initWhatsApp(SITE) {
   if (!SITE.whatsapp) return;
   const text = encodeURIComponent("Hola, me gustaría recibir información sobre vuestros productos cerámicos.");
@@ -72,11 +43,10 @@ function initWhatsApp(SITE) {
     link.href = `https://wa.me/${SITE.whatsapp}?text=${text}`;
     link.target = "_blank";
     link.rel = "noopener";
-    link.hidden = false;
   });
 }
 
-// Datos de contacto de la sección de contacto y del footer
+// Teléfono, correo y redes de la sección de contacto y del footer
 function initContactDetails(SITE) {
   const fill = (key, value, href) => {
     document.querySelectorAll(`[data-contact="${key}"]`).forEach((el) => {
@@ -91,7 +61,15 @@ function initContactDetails(SITE) {
   };
   fill("email", SITE.email, `mailto:${SITE.email}`);
   fill("phone", SITE.phone, `tel:${(SITE.phone || "").replace(/\s/g, "")}`);
-  fill("address", SITE.address);
+
+  document.querySelectorAll("[data-social]").forEach((link) => {
+    const url = SITE[link.dataset.social];
+    if (!url) return;
+    link.href = url;
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.hidden = false;
+  });
 }
 
 // Formulario de contacto
@@ -101,7 +79,7 @@ function initContactForm(SITE) {
   const status = form.querySelector(".form-status");
 
   const setError = (field, message) => {
-    const wrap = field.closest(".field") || field.closest(".full");
+    const wrap = field.closest(".field");
     if (!wrap) return;
     wrap.classList.toggle("is-invalid", Boolean(message));
     const error = wrap.querySelector(".error");
@@ -139,20 +117,20 @@ function initContactForm(SITE) {
 
     const data = new FormData(form);
     const lines = [
-      `Nombre: ${data.get("nombre")}`,
-      `Empresa: ${data.get("empresa")}`,
-      `Correo: ${data.get("email")}`,
-      `Teléfono: ${data.get("telefono") || "-"}`,
+      `Nombre: ${data.get("nombre") || "-"}`,
+      `Teléfono / WhatsApp: ${data.get("telefono")}`,
+      `País / Localidad: ${data.get("pais")}`,
+      `Email: ${data.get("email")}`,
       "",
       data.get("mensaje")
     ];
 
     status.hidden = false;
     if (SITE.email) {
-      const subject = encodeURIComponent(`Consulta web - ${data.get("empresa")}`);
+      const subject = encodeURIComponent(`Solicitud de información - ${data.get("pais")}`);
       const body = encodeURIComponent(lines.join("\n"));
       window.location.href = `mailto:${SITE.email}?subject=${subject}&body=${body}`;
-      status.textContent = "Se ha abierto tu programa de correo con el mensaje preparado. Envíalo para completar la consulta.";
+      status.textContent = "Se ha abierto tu programa de correo con el mensaje preparado. Envíalo para completar la solicitud.";
     } else {
       status.textContent = "Gracias. El envío del formulario está en configuración: muy pronto podrás enviarnos tu mensaje desde aquí.";
     }
