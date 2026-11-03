@@ -80,6 +80,7 @@ h1, h2, h3 { font-family: var(--font-heading); font-weight: 600; line-height: 1.
   background: var(--overlay);
 }
 .photo-bg--dark::before { background: rgba(29, 30, 32, .68); }
+.hero.photo-bg::before { background: rgba(29, 30, 32, .58); }
 
 /* ==========================================================================
    Cabecera
