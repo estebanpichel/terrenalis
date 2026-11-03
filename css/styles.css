@@ -104,8 +104,6 @@ h1, h2, h3 { font-family: var(--font-heading); font-weight: 600; line-height: 1.
   display: flex;
   align-items: center;
   height: 76px;
-  padding: 4px 10px;
-  background: var(--white);
 }
 .brand img { height: 100%; width: auto; }
 @media (min-width: 920px) { .brand { height: 105px; } }
