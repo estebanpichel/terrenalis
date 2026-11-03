@@ -1,5 +1,6 @@
 // Datos de la empresa. Rellena estos valores cuando estén confirmados:
-// la web los usa en el botón de WhatsApp, el formulario y el mapa.
+// la web los usa en el contacto, el footer, el formulario y WhatsApp.
+// Los datos que queden vacíos no se muestran.
 window.SITE = {
   name: "Terrenalis",
 
@@ -10,16 +11,5 @@ window.SITE = {
   email: "",
 
   phone: "",
-  address: "",
-
-  // Mercados internacionales. Usa el código ISO 3166 numérico de cada país
-  // (España = "724"); la lista completa está en https://es.wikipedia.org/wiki/ISO_3166-1
-  // No añadas países hasta que estén confirmados.
-  markets: {
-    headquarters: { name: "España", iso: "724" },
-    // Países de origen de los proveedores. Ej.: { name: "Italia", iso: "380" }
-    origins: [],
-    // Destinos comerciales. Ej.: { name: "Francia", iso: "250" }
-    destinations: []
-  }
+  address: ""
 };
